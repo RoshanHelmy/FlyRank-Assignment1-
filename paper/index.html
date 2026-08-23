@@ -1,1 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Content Opportunity Scoring for SEO Action Prioritization</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: #f6f7f9;
+    color: #20242a;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+}
+
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.header-inner {
+    max-width: 1050px;
+    margin: auto;
+    padding: 55px 24px;
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 13px;
+    font-weight: 700;
+    color: #667085;
+}
+
+h1 {
+    font-size: 46px;
+    line-height: 1.12;
+    margin: 15px 0 20px;
+    max-width: 900px;
+}
+
+h2 {
+    margin-top: 55px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 28px;
+}
+
+h3 {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #667085;
+    max-width: 800px;
+}
+
+.meta {
+    margin-top: 25px;
+    color: #667085;
+    font-size: 14px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.abstract {
+    border-left: 4px solid #20242a;
+    padding-left: 22px;
+    font-size: 17px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 22px 0;
+    background: white;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+    background: #f1f3f5;
+    font-weight: 700;
+}
+
+.code {
+    background: #111827;
+    color: #f9fafb;
+    padding: 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: monospace;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #eef2f7;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.warning {
+    background: #fff8e6;
+    border-left: 4px solid #d99a00;
+    padding: 18px;
+    margin: 20px 0;
+}
+
+.success {
+    background: #eef8f1;
+    border-left: 4px solid #2f7d4a;
+    padding: 18px;
+    margin: 20px 0;
+}
+
+footer {
+    margin-top: 70px;
+    padding-top: 25px;
+    border-top: 1px solid #dfe3e8;
+    color: #667085;
+    font-size: 14px;
+}
+
+a {
+    color: #175cd3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.small {
+    font-size: 14px;
+    color: #667085;
+}
+
+@media (max-width: 700px) {
+    h1 {
+        font-size: 34px;
+    }
+
+    .container {
+        padding: 25px 18px 60px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+
+<div class="eyebrow">FlyRank ML Internship · Research Artifact</div>
+
+<h1>
+Content Opportunity Scoring for SEO Action Prioritization
+</h1>
+
+<p class="subtitle">
+A measured, decision-support baseline and modeling study for prioritizing
+content pages for human SEO review.
+</p>
+
+<p class="meta">
+Capstone research artifact · 2026
+</p>
+
+</div>
+</header>
+
+<main class="container">
+
+<!-- ABSTRACT -->
+
+<h2>Abstract</h2>
+
+<div class="card abstract">
+
+<p>
+This study asks whether observable content-performance signals can support a
+ranked queue for prioritizing SEO content actions. The analysis uses the
+FlyRank ML Internship dataset and focuses on measurable signals including
+search impressions, click-through rate (CTR), average search position, and
+content characteristics. A rule-based baseline was constructed first and a
+machine-learning modeling workflow was then evaluated using an explicit
+validation design and leakage checks. The observed results show that
+impressions, CTR, and search position provide useful directional signals for
+identifying pages that may deserve human review, while the analysis does not
+establish that the resulting ranking will cause future traffic or ranking
+improvements. The final output is therefore framed as a decision-support
+queue rather than an autonomous SEO system.
+</p>
+
+</div>
+
+
+<!-- 1 QUESTION -->
+
+<h2>1. Introduction / Problem Statement</h2>
+
+<p>
+SEO teams may have many content pages competing for limited editorial and
+optimization capacity. A practical question is therefore not simply which
+pages perform well, but which pages appear to have signals that justify
+further investigation.
+</p>
+
+<p>
+The research question for this project is:
+</p>
+
+<div class="card">
+<strong>
+Can observable content-performance signals be used to rank pages for
+human review and content-action prioritization?
+</strong>
+</div>
+
+<p>
+The intended decision is narrow: help a human reviewer decide which pages
+should be inspected first. The system is not intended to automatically
+rewrite, delete, publish, or otherwise modify content.
+</p>
+
+
+<!-- 2 DATA -->
+
+<h2>2. Data</h2>
+
+<p>
+The analysis uses the FlyRank ML Internship dataset available to the
+internship project. The principal performance table used in the work was
+the daily content-performance dataset, together with the content dimension
+table.
+</p>
+
+<h3>Observed dataset scale</h3>
+
+<table>
+<tr>
+<th>Dataset component</th>
+<th>Observed scale</th>
+</tr>
+
+<tr>
+<td>Performance records</td>
+<td>9,841,378 rows</td>
+</tr>
+
+<tr>
+<td>Content records</td>
+<td>519,606 rows</td>
+</tr>
+
+<tr>
+<td>Unique clients in the performance data</td>
+<td>55</td>
+</tr>
+
+<tr>
+<td>Unique content pages in the performance data</td>
+<td>331,437</td>
+</tr>
+
+<tr>
+<td>Performance reporting window used in the analysis</td>
+<td>March 2026</td>
+</tr>
+</table>
+
+<p>
+The performance table included Google Search Console availability and
+measurements such as impressions, clicks, and average position. The content
+table included content-level characteristics such as creation date and
+word count.
+</p>
+
+<p>
+The analysis excluded information that was not necessary for the decision
+problem and avoided exposing client names, URLs, private search queries,
+or other identifying content information in the public artifact.
+</p>
+
+
+<!-- 3 METHODOLOGY -->
+
+<h2>3. Methodology</h2>
+
+<h3>3.1 Assumptions</h3>
+
+<p>
+The main assumption is that pages with stronger observable opportunity
+signals can be useful candidates for human investigation. This is an
+operational assumption, not a causal claim.
+</p>
+
+<p>
+The analysis treats search impressions, CTR, and average position as
+observational signals. They are not interpreted as proof that changing a
+page will produce a particular future outcome.
+</p>
+
+
+<h3>3.2 Features</h3>
+
+<p>
+The workflow used measurable content and performance signals. The main
+features included:
+</p>
+
+<ul>
+<li>Search impressions</li>
+<li>Click-through rate (CTR)</li>
+<li>Average search position</li>
+<li>Content age</li>
+<li>Word count where available</li>
+<li>Derived opportunity scores based on observed performance</li>
+</ul>
+
+<p>
+The final action queue also contained interpretable components such as
+CTR opportunity and position opportunity.
+</p>
+
+
+<h3>3.3 Baseline</h3>
+
+<p>
+The Week-4 baseline deliberately used a transparent rule rather than a
+complex model. The baseline produced an action score and a single reason
+code for each eligible page.
+</p>
+
+<p>
+A key reason code was:
+</p>
+
+<div class="card">
+<span class="badge">LOW_CTR</span>
+</div>
+
+<p>
+This represented pages where the observed CTR signal suggested an
+opportunity for human review. The resulting score was used only to rank
+the queue.
+</p>
+
+
+<h3>3.4 Modeling approach</h3>
+
+<p>
+The Week-5 modeling work investigated a machine-learning approach using
+the same underlying performance signals and compared the model against the
+baseline rather than rewarding complexity by itself.
+</p>
+
+<p>
+The modeling workflow emphasized interpretable features and an explicit
+validation design. The purpose was to determine whether the model provided
+measured evidence beyond the simple rule.
+</p>
+
+
+<h3>3.5 Validation design</h3>
+
+<p>
+The later validation audit specifically examined whether a conventional
+random split could give an overly optimistic view when records from the
+same client appear in both training and evaluation data.
+</p>
+
+<p>
+A grouped-by-client validation design was therefore used as the more
+conservative evaluation perspective. This tests whether the learned
+relationship generalizes beyond pages belonging to the same client groups
+seen during training.
+</p>
+
+<div class="warning">
+<strong>Interpretation:</strong>
+The grouped evaluation is treated as the more honest estimate for
+cross-client generalization. Differences between ordinary and grouped
+evaluation should be interpreted as evidence about generalization
+difficulty, not as evidence that the model is universally accurate.
+</div>
+
+
+<h3>3.6 Leakage checks</h3>
+
+<p>
+The feature audit considered whether variables contained future information
+or information derived directly from the outcome being evaluated.
+</p>
+
+<p>
+The analysis specifically avoided future-window performance measures and
+label-derived inputs when constructing the decision-support features.
+The validation audit also reviewed the final feature set for variables
+that could leak information from the evaluation period.
+</p>
+
+<p>
+This was an important part of the workflow because a feature can appear
+predictive while actually encoding information that would not be available
+at decision time.
+</p>
+
+
+<!-- 4 RESULTS -->
+
+<h2>4. Results</h2>
+
+<h3>4.1 Signal checks</h3>
+
+<p>
+The Week-4 exploratory checks measured relationships between performance
+signals and CTR. Two useful directional observations were:
+</p>
+
+<table>
+<tr>
+<th>Position bucket</th>
+<th>n</th>
+<th>Mean CTR</th>
+<th>Mean impressions</th>
+</tr>
+
+<tr>
+<td>Top (&le;5)</td>
+<td>1,263,125</td>
+<td>0.004495</td>
+<td>96.51</td>
+</tr>
+
+<tr>
+<td>Middle (5–15)</td>
+<td>1,233,378</td>
+<td>0.003038</td>
+<td>70.18</td>
+</tr>
+
+<tr>
+<td>Lower (&gt;15)</td>
+<td>1,114,558</td>
+<td>0.001524</td>
+<td>64.78</td>
+</tr>
+</table>
+
+<p>
+The observed pattern is directionally consistent with the expectation that
+pages appearing higher in search results tend to receive higher CTR in
+this dataset.
+</p>
+
+<h3>4.2 Impression buckets</h3>
+
+<table>
+<tr>
+<th>Impression bucket</th>
+<th>n</th>
+<th>Mean CTR</th>
+<th>Mean position</th>
+</tr>
+
+<tr>
+<td>Low (0–99)</td>
+<td>9,202,770</td>
+<td>0.003086</td>
+<td>16.85</td>
+</tr>
+
+<tr>
+<td>Medium (100–499)</td>
+<td>537,157</td>
+<td>0.003101</td>
+<td>10.94</td>
+</tr>
+
+<tr>
+<td>High (500+)</td>
+<td>101,451</td>
+<td>0.002804</td>
+<td>11.69</td>
+</tr>
+</table>
+
+<p>
+The impression-bucket result is less uniform. This is important because it
+shows why impressions should not be treated as a complete explanation of
+content opportunity. The result was therefore treated as directional
+evidence rather than a universal rule.
+</p>
+
+
+<h3>4.3 Ranked action queue</h3>
+
+<p>
+The final action queue contained 331,437 content-page records and 13
+columns describing the measured opportunity signals, score, reason code,
+action, and rank.
+</p>
+
+<table>
+<tr>
+<th>Rank</th>
+<th>Reason code</th>
+<th>Action</th>
+<th>Impressions</th>
+<th>CTR</th>
+<th>Average position</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>LOW_CTR</td>
+<td>Prioritize for human review</td>
+<td>8,905</td>
+<td>0.000</td>
+<td>68.39</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>LOW_CTR</td>
+<td>Prioritize for human review</td>
+<td>21,939</td>
+<td>0.000</td>
+<td>51.57</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>LOW_CTR</td>
+<td>Prioritize for human review</td>
+<td>11,973</td>
+<td>0.000</td>
+<td>54.58</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>LOW_CTR</td>
+<td>Prioritize for human review</td>
+<td>28,934</td>
+<td>0.000</td>
+<td>47.08</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>LOW_CTR</td>
+<td>Prioritize for human review</td>
+<td>10,452</td>
+<td>0.000</td>
+<td>53.18</td>
+</tr>
+</table>
+
+
+<h3>4.4 Model versus baseline</h3>
+
+<p>
+The central comparison in the modeling work was designed to use the same
+data and evaluation split for the model and baseline. This prevents a
+difference in the evaluation population from being mistaken for a model
+improvement.
+</p>
+
+<p>
+The project deliberately does not claim that the model is better simply
+because it is more complex. The appropriate conclusion depends on the
+measured evaluation metrics from the executed Week-5 notebook.
+</p>
+
+<div class="success">
+<strong>Decision-support conclusion:</strong>
+The workflow provides a reproducible way to rank content opportunities,
+but the evidence supports prioritization and investigation rather than an
+automatic claim of improved future SEO performance.
+</div>
+
+
+<!-- 5 LIMITATIONS -->
+
+<h2>5. Limitations &amp; Honest Framing</h2>
+
+<ul>
+
+<li>
+The dataset covers a limited reporting window, so the observed patterns
+may not represent longer-term seasonality.
+</li>
+
+<li>
+The analysis is observational. It does not establish that changing a page
+will cause higher traffic, CTR, or search rankings.
+</li>
+
+<li>
+Average position and CTR are correlated signals, so their relationship
+should not be interpreted as a causal mechanism.
+</li>
+
+<li>
+Some content records do not have complete performance information, so
+availability flags matter when interpreting results.
+</li>
+
+<li>
+Client grouping means that cross-client generalization is more demanding
+than evaluating pages from clients already represented in training data.
+</li>
+
+<li>
+The ranked queue should be treated as a prioritization aid, not as an
+automated publishing or optimization system.
+</li>
+
+</ul>
+
+<p>
+The strongest defensible framing is therefore:
+<strong>
+the analysis measured directional signals that can support human review
+and action prioritization.
+</strong>
+</p>
+
+
+<!-- 6 RECOMMENDATIONS -->
+
+<h2>6. Ranked Recommendations</h2>
+
+<p>
+The action playbook converts the measured signals into a practical review
+workflow.
+</p>
+
+<table>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>Reason</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Prioritize for human review</td>
+<td>
+Investigate pages with a strong observed CTR opportunity before making
+content changes.
+</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Inspect search positioning</td>
+<td>
+Review pages where search position suggests an opportunity but do not
+assume ranking improvement is guaranteed.
+</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Check content context</td>
+<td>
+Use content characteristics and editorial context to determine whether
+the measured signal is actionable.
+</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Re-check before action</td>
+<td>
+Confirm that the signal remains current before an editor acts.
+</td>
+</tr>
+
+</table>
+
+
+<h3>Human review requirements</h3>
+
+<p>
+A human should inspect the page before any substantive change. The reviewer
+should check search intent, content quality, relevance, technical context,
+and whether the measured signal could have a non-content explanation.
+</p>
+
+<h3>What should NOT be automated</h3>
+
+<ul>
+<li>Automatic deletion of pages</li>
+<li>Automatic publication of rewritten content</li>
+<li>Automatic changes to important metadata without review</li>
+<li>Automatic claims that an optimization will improve rankings</li>
+<li>Automatic decisions based solely on the action score</li>
+</ul>
+
+
+<!-- 7 REPRODUCIBILITY -->
+
+<h2>7. Reproducibility</h2>
+
+<p>
+The analysis was developed as a sequence of executable internship
+notebooks. The repository contains the baseline, modeling, validation
+audit, action playbook, and capstone work.
+</p>
+
+<ul>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/tree/main/work/notebooks">
+Notebook collection
+</a>
+</li>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/blob/main/work/notebooks/w04_baseline_score.ipynb">
+Week 4 — Baseline Action Score
+</a>
+</li>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/blob/main/work/notebooks/w05_model.ipynb">
+Week 5 — Capstone Modeling Lane
+</a>
+</li>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/blob/main/work/notebooks/w06_validation_audit.ipynb">
+Week 6 — Validation and Research Claim Audit
+</a>
+</li>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/blob/main/work/notebooks/w07_action_playbook.ipynb">
+Week 7 — Content Action Playbook
+</a>
+</li>
+
+<li>
+<a href="https://github.com/RoshanHelmy/FlyRank-Assignment1-/tree/main/work/outputs">
+Generated outputs
+</a>
+</li>
+
+</ul>
+
+
+<!-- 8 ACKNOWLEDGMENTS -->
+
+<h2>8. Acknowledgments &amp; Data Credit</h2>
+
+<p>
+Built on the FlyRank ML Internship dataset.
+</p>
+
+<p>
+The work was completed as part of the FlyRank ML Internship program.
+Data and project context are credited to
+<a href="https://flyrank.ai" target="_blank" rel="noopener">
+FlyRank
+</a>.
+</p>
+
+<p class="small">
+This research artifact is intended for educational and decision-support
+purposes. It does not represent production SEO advice or a guarantee of
+future search performance.
+</p>
+
+
+<footer>
+
+<p>
+<strong>Public-safe research artifact</strong>
+</p>
+
+<p>
+No client names, URLs, private search queries, or other private identifying
+content are intentionally included in this paper.
+</p>
+
+<p>
+All conclusions use observational and measured language and should be
+interpreted within the stated limitations.
+</p>
+
+</footer>
+
+</div>
+
+</main>
+
+</body>
+</html>
